@@ -5,7 +5,7 @@ import {
   OnGatewayConnection,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer,
+  WebSocketServer
 } from '@nestjs/websockets';
 import { BoardService } from './board.service';
 import { Server, Socket } from 'socket.io';
@@ -15,7 +15,7 @@ const configService = new ConfigService();
 const basePath = configService.get('BASE_PATH');
 const socketPath = `/${basePath}`;
 
-@WebSocketGateway({ path: socketPath })
+@WebSocketGateway({ cors: { origin: '*' }, path: socketPath })
 export class BoardGateway implements OnGatewayConnection {
   @WebSocketServer()
   server: Server;
