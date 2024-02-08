@@ -1,8 +1,12 @@
-import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { SigninDto } from './dto/signin.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserService } from '../user/user.service';
-import { Response } from 'express';
 import { EncryptService } from '../../common/modules/encrypt/encrypt.service';
 import { JwtService } from '@nestjs/jwt';
 
@@ -14,8 +18,19 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(signInDto: SigninDto, res: Response) {
+  async signIn(signInDto: SigninDto) {
     const user = await this.userService.findByEmail(signInDto.email);
+
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'User not exists!',
+          timestamp: new Date().getTime(),
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
 
     const validPassword = this.encryptService.compare(
       signInDto.password,
@@ -31,10 +46,12 @@ export class AuthService {
 
     const { _id: id, email } = user;
 
-    return res
-      .status(HttpStatus.OK)
-      .send({ id, email, access_token: this.jwtService.sign({ id, email }) });
+    return { id, email, access_token: this.jwtService.sign({ id, email }) };
   }
 
-  signUp(createUserDto: CreateUserDto, res: Response) {}
+  async signUp(createUserDto: CreateUserDto) {
+    await this.userService.create(createUserDto);
+
+    return { message: 'User registered sucessfully!' };
+  }
 }

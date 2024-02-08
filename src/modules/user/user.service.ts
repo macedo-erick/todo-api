@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -13,7 +13,19 @@ export class UserService {
     private encryptService: EncryptService,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
+    const existsByEmail = await this.existsByEmail(createUserDto.email);
+
+    if (existsByEmail) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: `User already exists for given email ${[createUserDto.email]}`,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     return new this.userModel({
       ...createUserDto,
       password: this.encryptService.encrypt(createUserDto.password),
@@ -38,5 +50,9 @@ export class UserService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  private async existsByEmail(email: string) {
+    return this.userModel.exists({ email });
   }
 }
