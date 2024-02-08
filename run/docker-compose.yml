@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  todo-mongodb:
+    image: mongo
+    container_name: todo-mongodb
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME:${DB_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD:${DB_PASSWORD}
+      - MONGO_INITDB_DATABASE:${DB_NAME}
+    ports:
+      - ${DB_PORT}:27017
+    volumes:
+      - todo-mongodb:/data/db
+    networks:
+      - todo-network
+    env_file:
+      - ../.env.development
+
+  todo-api:
+    depends_on:
+      - todo-mongodb
+    restart: always
+    image: todo-api
+    container_name: todo-api
+    build:
+      context: ../
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - ${API_PORT}:${API_PORT}
+      - ${DEBUG_PORT}:9229
+    volumes:
+      - $PWD:/todo-api
+    networks:
+      - todo-network
+    env_file:
+      - ../.env.development
+    command: yarn run start:debug
+
+volumes:
+  todo-mongodb: { }
+
+networks:
+  todo-network: { }
