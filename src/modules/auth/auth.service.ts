@@ -31,9 +31,9 @@ export class AuthService {
 
     const { _id: id, email } = user;
 
-    const acessToken = await this.jwtService.signAsync({ id, email });
-
-    return res.status(HttpStatus.OK).send({ id, email, acessToken });
+    return res
+      .status(HttpStatus.OK)
+      .send({ id, email, access_token: this.jwtService.sign({ id, email }) });
   }
 
   signUp(createUserDto: CreateUserDto, res: Response) {}

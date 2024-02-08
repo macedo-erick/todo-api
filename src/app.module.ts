@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 import mongodbConfig from './common/config/mongodb.config';
 import jwtConfig from './common/config/jwt.config';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -36,7 +37,7 @@ import jwtConfig from './common/config/jwt.config';
     UserModule,
     BoardModule,
     EncryptModule,
-    AuthMoule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
