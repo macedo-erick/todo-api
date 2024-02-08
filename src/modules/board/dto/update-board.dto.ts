@@ -1,6 +1,8 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateBoardDto } from './create-board.dto';
+import { List } from '../entities/list.entity';
 
-export class UpdateBoardDto extends PartialType(CreateBoardDto) {
-  id: number;
+export class UpdateBoardDto {
+  _id: string;
+  name: string;
+  list: List[];
+  userId: string;
 }

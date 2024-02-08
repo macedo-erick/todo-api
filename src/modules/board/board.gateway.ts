@@ -9,76 +9,89 @@ import {
 import { BoardService } from './board.service';
 import { Server, Socket } from 'socket.io';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { CreateBoardDto } from './dto/create-board.dto';
+import { UpdateBoardDto } from './dto/update-board.dto';
 
 const configService = new ConfigService();
+
 const basePath = configService.get('WS_BASE_PATH');
 const socketPath = `/${basePath}`;
+const corsOrigin = configService.get('CORS_ORIGINS');
 
 @WebSocketGateway({
   path: socketPath,
   nameSpace: 'boards',
-  cors: { origin: '*' },
+  cors: { origin: corsOrigin },
 })
 export class BoardGateway {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly boardService: BoardService) {}
+  constructor(
+    private readonly boardService: BoardService,
+    private jwtService: JwtService,
+  ) {}
 
   @SubscribeMessage('create')
   async create(
-    @MessageBody() createBoardDto: string,
+    @MessageBody() createBoardDto: CreateBoardDto,
     @ConnectedSocket() socket: Socket,
   ) {
-    const { s } = socket.handshake.query;
+    const { authorization } = socket.handshake.headers;
+    const { id } = this.jwtService.decode(authorization);
 
     const { _id, name, userId, ...rest } = await this.boardService.create(
-      JSON.parse(createBoardDto),
+      createBoardDto,
     );
 
-    this.server
-      .to(s)
-      .emit('findAll', await this.boardService.findAll(String(s)));
+    this.server.to(id).emit('onFindAll', await this.boardService.findAll(id));
   }
 
   @SubscribeMessage('findOne')
-  async findOne(@MessageBody() req: string, @ConnectedSocket() socket: Socket) {
-    const { b } = socket.handshake.query;
+  async findOne(
+    @MessageBody() req: { _id: string },
+    @ConnectedSocket() socket: Socket,
+  ) {
+    const { _id } = req;
 
-    socket.emit('findOne', await this.boardService.findOne(String(b)));
+    socket.join(_id);
+    socket.emit('onFindOne', await this.boardService.findOne(_id));
   }
 
   @SubscribeMessage('findAll')
   async findAll(@ConnectedSocket() socket: Socket) {
-    const { s } = socket.handshake.query;
+    const { authorization } = socket.handshake.headers;
+    const { id } = this.jwtService.decode(authorization);
 
-    socket.emit('findAll', await this.boardService.findAll(String(s)));
+    socket.join(id);
+
+    this.server.to(id).emit('onFindAll', await this.boardService.findAll(id));
   }
 
   @SubscribeMessage('update')
   async update(
-    @MessageBody() strUpdateBoardDto: string,
+    @MessageBody() updateBoardDto: UpdateBoardDto,
     @ConnectedSocket() socket: Socket,
   ) {
-    const { b, s } = socket.handshake.query;
+    await this.boardService.update(String(updateBoardDto._id), updateBoardDto);
 
-    const updateBoardDto = JSON.parse(strUpdateBoardDto);
-
-    const board = await this.boardService.update(String(b), updateBoardDto);
-
-    this.server.to(b).emit('findOne', board);
-    socket.emit('findAll', await this.boardService.findAll(String(s)));
+    this.server
+      .to(updateBoardDto._id)
+      .emit('onFindOne', await this.boardService.findOne(updateBoardDto._id));
   }
 
   @SubscribeMessage('remove')
-  async remove(@MessageBody() req: string, @ConnectedSocket() socket: Socket) {
-    const { id } = JSON.parse(req);
+  async remove(
+    @MessageBody() req: { _id: string },
+    @ConnectedSocket() socket: Socket,
+  ) {
+    const { _id } = req;
+    const { authorization } = socket.handshake.headers;
+    const { id } = this.jwtService.decode(authorization);
 
-    await this.boardService.remove(id);
+    await this.boardService.remove(_id);
 
-    socket.emit(
-      'findAll',
-      await this.boardService.findAll('65c4219dfd678075ef89642f'),
-    );
+    this.server.to(id).emit('onFindAll', await this.boardService.findAll(id));
   }
 }
