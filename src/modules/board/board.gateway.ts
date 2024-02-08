@@ -1,39 +1,30 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  ConnectedSocket,
-  MessageBody,
-  OnGatewayConnection,
-  SubscribeMessage,
-  WebSocketGateway,
-  WebSocketServer
-} from '@nestjs/websockets';
+import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { BoardService } from './board.service';
 import { Server, Socket } from 'socket.io';
 import { ConfigService } from '@nestjs/config';
 
 const configService = new ConfigService();
-const basePath = configService.get('BASE_PATH');
+const basePath = configService.get('WS_BASE_PATH');
 const socketPath = `/${basePath}`;
 
-@WebSocketGateway({ cors: { origin: '*' }, path: socketPath })
-export class BoardGateway implements OnGatewayConnection {
+@WebSocketGateway({
+  path: socketPath,
+  nameSpace: 'boards',
+  cors: { origin: '*' },
+})
+export class BoardGateway {
   @WebSocketServer()
   server: Server;
 
   constructor(private readonly boardService: BoardService) {}
 
-  handleConnection(@ConnectedSocket() client: Socket) {
-    const { s, b } = client.handshake.query;
-
-    client.join([String(s), String(b)]);
-  }
-
-  @SubscribeMessage('createBoard')
+  @SubscribeMessage('create')
   async create(
     @MessageBody() createBoardDto: string,
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() socket: Socket,
   ) {
-    const { s } = client.handshake.query;
+    const { s } = socket.handshake.query;
 
     const { _id, name, userId, ...rest } = await this.boardService.create(
       JSON.parse(createBoardDto),
@@ -41,56 +32,47 @@ export class BoardGateway implements OnGatewayConnection {
 
     this.server
       .to(s)
-      .emit('findAllBoards', await this.boardService.findAll(String(s)));
+      .emit('findAll', await this.boardService.findAll(String(s)));
   }
 
-  @SubscribeMessage('findOneBoard')
-  async findOneBoard(
-    @MessageBody() req: string,
-    @ConnectedSocket() client: Socket,
-  ) {
-    const { b } = client.handshake.query;
+  @SubscribeMessage('findOne')
+  async findOne(@MessageBody() req: string, @ConnectedSocket() socket: Socket) {
+    const { b } = socket.handshake.query;
 
-    this.server
-      .to(b)
-      .emit('findOneBoard', await this.boardService.findOne(String(b)));
+    socket.emit('findOne', await this.boardService.findOne(String(b)));
   }
 
-  @SubscribeMessage('findAllBoards')
-  async findAllBoards(@ConnectedSocket() client: Socket) {
-    const { s } = client.handshake.query;
+  @SubscribeMessage('findAll')
+  async findAll(@ConnectedSocket() socket: Socket) {
+    const { s } = socket.handshake.query;
 
-    this.server
-      .to(s)
-      .emit('findAllBoards', await this.boardService.findAll(String(s)));
+    socket.emit('findAll', await this.boardService.findAll(String(s)));
   }
 
-  @SubscribeMessage('updateBoard')
+  @SubscribeMessage('update')
   async update(
     @MessageBody() strUpdateBoardDto: string,
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() socket: Socket,
   ) {
-    const { b, s } = client.handshake.query;
+    const { b, s } = socket.handshake.query;
 
     const updateBoardDto = JSON.parse(strUpdateBoardDto);
 
     const board = await this.boardService.update(String(b), updateBoardDto);
 
-    this.server.to(b).emit('updatedBoard', board);
-    this.server
-      .to(s)
-      .emit('findAllBoards', await this.boardService.findAll(String(s)));
+    this.server.to(b).emit('findOne', board);
+    socket.emit('findAll', await this.boardService.findAll(String(s)));
   }
 
-  @SubscribeMessage('removeBoard')
-  async remove(@MessageBody() req: string, @ConnectedSocket() client: Socket) {
-    const { s } = client.handshake.query;
+  @SubscribeMessage('remove')
+  async remove(@MessageBody() req: string, @ConnectedSocket() socket: Socket) {
     const { id } = JSON.parse(req);
 
     await this.boardService.remove(id);
 
-    this.server
-      .to(s)
-      .emit('findAllBoards', await this.boardService.findAll(String(s)));
+    socket.emit(
+      'findAll',
+      await this.boardService.findAll('65c4219dfd678075ef89642f'),
+    );
   }
 }

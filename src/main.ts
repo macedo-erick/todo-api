@@ -1,15 +1,18 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { EnvironmentsEnum } from './common/enums/Environments.enum';
 import * as cookieParser from 'cookie-parser';
+import { AuthGuard } from './modules/auth/guards/auth/auth.guard';
+import { JwtService } from '@nestjs/jwt';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
-  const basePath = configService.get('BASE_PATH');
+  const basePath = configService.get('HTTP_BASE_PATH');
+  app.setGlobalPrefix(basePath);
 
   const config = new DocumentBuilder()
     .setTitle('TODO API')
@@ -38,6 +41,10 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
   });
+
+  app.useGlobalGuards(
+    new AuthGuard(new JwtService(), new Reflector(), new ConfigService()),
+  );
 
   await app.listen(process.env.API_PORT);
 }
