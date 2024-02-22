@@ -55,4 +55,16 @@ export class UserService {
   private async existsByEmail(email: string) {
     return this.userModel.exists({ email });
   }
+
+  async getUserInitials(_id: string) {
+    const { firstname, lastname } = await this.userModel
+      .findOne({ _id })
+      .exec();
+
+    const initials = firstname.substring(0, 1).concat(lastname.substring(0, 1));
+
+    return {
+      initials,
+    };
+  }
 }

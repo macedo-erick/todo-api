@@ -10,7 +10,7 @@ export class Board {
   name: string;
 
   @Prop()
-  list: List[];
+  lists: List[];
 
   @Prop()
   userId: string;

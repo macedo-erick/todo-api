@@ -25,7 +25,7 @@ export class AuthService {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
-          error: 'User not exists!',
+          error: 'User not exists',
           timestamp: new Date().getTime(),
         },
         HttpStatus.NOT_FOUND,
@@ -44,14 +44,18 @@ export class AuthService {
       });
     }
 
-    const { _id: id, email } = user;
+    const { _id: id, email, firstname, lastname } = user;
 
-    return { id, email, access_token: this.jwtService.sign({ id, email }) };
+    return {
+      id,
+      email,
+      access_token: this.jwtService.sign({ id, email }),
+    };
   }
 
   async signUp(createUserDto: CreateUserDto) {
     await this.userService.create(createUserDto);
 
-    return { message: 'User registered sucessfully!' };
+    return { message: 'User registered sucessfully' };
   }
 }
