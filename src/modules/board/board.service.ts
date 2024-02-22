@@ -15,8 +15,10 @@ export class BoardService {
     return new this.boardModel(createBoardDto).save();
   }
 
-  findAll(userId: string) {
-    return this.boardModel.find({ userId });
+  async findAll(userId: string) {
+    const boards = await this.boardModel.find({ userId }).exec();
+
+    return boards.map(({ _id, name }) => ({ _id, name }));
   }
 
   findOne(id: string) {
