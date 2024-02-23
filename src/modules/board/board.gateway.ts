@@ -41,9 +41,10 @@ export class BoardGateway {
     const { authorization } = socket.handshake.headers;
     const { id } = this.jwtService.decode(authorization);
 
-    const { _id, name, userId, ...rest } = await this.boardService.create(
-      createBoardDto,
-    );
+    const { _id, name, userId, ...rest } = await this.boardService.create({
+      ...createBoardDto,
+      userId: id,
+    });
 
     this.server.to(id).emit('onFindAll', await this.boardService.findAll(id));
   }
