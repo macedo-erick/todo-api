@@ -1,4 +1,5 @@
 import { Checklist } from './checklist.model';
+import { Priority } from './priority.entity';
 
 export class Card {
   name: string;
@@ -6,4 +7,5 @@ export class Card {
   dueDate: Date;
   finished: boolean;
   checklist: Checklist;
+  priority: Priority;
 }
