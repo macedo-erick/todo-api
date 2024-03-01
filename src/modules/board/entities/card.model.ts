@@ -6,6 +6,7 @@ export class Card {
   description: string;
   createdDate: Date;
   dueDate: Date;
+  timeSpent: number;
   finished: boolean;
   checklist: Checklist;
   priority: Priority;
