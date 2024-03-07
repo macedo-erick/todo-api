@@ -60,6 +60,21 @@ export class BoardGateway {
     socket.emit('onFindOne', await this.boardService.findOne(_id));
   }
 
+  @SubscribeMessage('findByName')
+  async findByName(
+    @MessageBody() req: { name: string },
+    @ConnectedSocket() socket: Socket,
+  ) {
+    const { authorization } = socket.handshake.headers;
+    const { id } = this.jwtService.decode(authorization);
+
+    const { name } = req;
+
+    this.server
+      .to(id)
+      .emit('onFindAll', await this.boardService.findByName(id, name));
+  }
+
   @SubscribeMessage('findAll')
   async findAll(@ConnectedSocket() socket: Socket) {
     const { authorization } = socket.handshake.headers;

@@ -25,6 +25,17 @@ export class BoardService {
     return this.boardModel.findById(id).exec();
   }
 
+  findByName(userId: string, name: string) {
+    if (name) {
+      return this.boardModel.find({
+        userId,
+        name: { $regex: `.*${name}.*`, $options: 'i' },
+      });
+    }
+
+    return this.findAll(userId);
+  }
+
   update(id: string, updateBoardDto: UpdateBoardDto) {
     return this.boardModel.findByIdAndUpdate(id, updateBoardDto).exec();
   }
