@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { List } from './list.entity';
+import { List } from '../models/list.model';
 import { HydratedDocument } from 'mongoose';
 
 export type BoardDocument = HydratedDocument<Board>;

@@ -1,5 +1,5 @@
 import { Checklist } from './checklist.model';
-import { Priority } from './priority.entity';
+import { Priority } from './priority.model';
 import { Comment } from './comment.model';
 
 export class Card {

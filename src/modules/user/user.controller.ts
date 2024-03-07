@@ -14,11 +14,6 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @Get('/initials')
-  getUserInitials(@User() id: string) {
-    return this.userService.getUserInitials(id);
-  }
-
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);

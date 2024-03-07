@@ -9,8 +9,8 @@ import { EncryptService } from '../../common/modules/encrypt/encrypt.service';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private encryptService: EncryptService,
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    private readonly encryptService: EncryptService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -54,17 +54,5 @@ export class UserService {
 
   private async existsByEmail(email: string) {
     return this.userModel.exists({ email });
-  }
-
-  async getUserInitials(_id: string) {
-    const { firstname, lastname } = await this.userModel
-      .findOne({ _id })
-      .exec();
-
-    const initials = firstname.substring(0, 1).concat(lastname.substring(0, 1));
-
-    return {
-      initials,
-    };
   }
 }
