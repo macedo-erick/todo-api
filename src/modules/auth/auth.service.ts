@@ -50,7 +50,11 @@ export class AuthService {
     return {
       id,
       email,
-      access_token: this.jwtService.sign({ id, email }),
+      access_token: this.jwtService.sign({
+        id,
+        email,
+        fullName: firstname.concat(' ').concat(lastname),
+      }),
     };
   }
 
