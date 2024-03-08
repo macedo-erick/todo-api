@@ -45,7 +45,7 @@ export class AuthService {
       });
     }
 
-    const { _id: id, email, firstname, lastname } = user;
+    const { _id: id, email, firstName, lastName } = user;
 
     return {
       id,
@@ -53,7 +53,7 @@ export class AuthService {
       access_token: this.jwtService.sign({
         id,
         email,
-        fullName: firstname.concat(' ').concat(lastname),
+        fullName: firstName.concat(' ').concat(lastName),
       }),
     };
   }

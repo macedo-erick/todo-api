@@ -37,18 +37,18 @@ export class UserService {
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.userModel.find();
   }
 
   async findOne(_id: string) {
     return this.userModel.findOne({ _id }).exec();
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(id: string, updateUserDto: UpdateUserDto) {
+    return this.userModel.findByIdAndUpdate(id, updateUserDto);
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} user`;
   }
 
