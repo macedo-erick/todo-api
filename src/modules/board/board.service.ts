@@ -4,33 +4,36 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Board, BoardDocument } from './entities/board.entity';
 import { Model } from 'mongoose';
-import { UsersBoards } from './entities/users-boards.entity';
+import { UsersBoards, UserBoardDocument } from './entities/users-boards.entity';
 
 @Injectable()
 export class BoardService {
   constructor(
     @InjectModel(Board.name) private readonly boardModel: Model<BoardDocument>,
     @InjectModel(UsersBoards.name)
-    private readonly usersBoardsModel: Model<UsersBoards>,
+    private readonly usersBoardsModel: Model<UserBoardDocument>,
   ) {}
 
   async create(createBoardDto: CreateBoardDto, userId: string) {
-    const { _id: boardId, name } = await new this.boardModel(
-      createBoardDto,
-    ).save();
+    const { id: boardId } = await new this.boardModel(createBoardDto).save();
 
     return new this.usersBoardsModel({
       boardId,
-      name,
       userId,
       isAdmin: true,
-    });
+    }).save();
   }
 
   async findAll(userId: string) {
-    const boards = await this.usersBoardsModel.find({ userId }).exec();
+    const userBoards = await this.usersBoardsModel.find({ userId }).exec();
+    const boardsIds = userBoards.map(({ boardId }) => boardId);
+    const boards = await this.boardModel
+      .find({
+        _id: { $in: boardsIds },
+      })
+      .exec();
 
-    return boards.map(({ _id, name }) => ({ _id, name }));
+    return boards.map(({ name, _id: boardId }) => ({ name, boardId }));
   }
 
   findOne(id: string) {

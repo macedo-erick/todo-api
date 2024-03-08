@@ -1,13 +1,20 @@
-import { Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-export type BoardDocument = HydratedDocument<UsersBoards>;
+export type UserBoardDocument = HydratedDocument<UsersBoards>;
 
-@Schema()
+@Schema({ collection: 'users_boards' })
 export class UsersBoards {
+  @Prop()
   userId: string;
+
+  @Prop()
   boardId: string;
+
+  @Prop()
   name: string;
+
+  @Prop()
   isAdmin: boolean;
 }
 

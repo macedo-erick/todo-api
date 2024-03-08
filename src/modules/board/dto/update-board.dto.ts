@@ -1,4 +1,4 @@
-import { List } from '../entities/list.entity';
+import { List } from '../models/list.model';
 
 export class UpdateBoardDto {
   _id: string;
