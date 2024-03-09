@@ -39,7 +39,7 @@ availableSecrets:
       env: "API_PORT"
     - versionName: "projects/${PROJECT_NUMBER}/secrets/DB_HOST/versions/1"
       env: "DB_HOST"
-    - versionName: "projects/${PROJECT_NUMBER}/secrets/DB_NAME/versions/1"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/DB_USERNAME/versions/1"
       env: "DB_USERNAME"
     - versionName: "projects/${PROJECT_NUMBER}/secrets/DB_PASSWORD/versions/1"
       env: "DB_PASSWORD"
