@@ -2,6 +2,9 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     args: [ "build", "-t", "${_IMAGE_NAME}", "." ]
 
+  - name: "gcr.io/cloud-builders/docker"
+    args: [ "push",  "${_IMAGE_NAME}" ]
+
   - name: "gcr.io/cloud-builders/gcloud"
     args: [ "app", "deploy", "--image-url=${_IMAGE_NAME}" ]
     secretEnv: [
@@ -23,9 +26,6 @@ timeout: "2400s"
 options:
   automapSubstitutions: true
   dynamicSubstitutions: true
-
-images:
-  - "${_IMAGE_NAME}"
 
 availableSecrets:
   secretManager:
