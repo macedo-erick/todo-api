@@ -1,16 +1,24 @@
 steps:
   - name: "gcr.io/cloud-builders/docker"
-    args: [ "build", "-t", "${_IMAGE_NAME}", "." ]
-
-  - name: "gcr.io/cloud-builders/docker"
-    args: [ "push",  "${_IMAGE_NAME}" ]
-
-  - name: "gcr.io/cloud-builders/gcloud"
-    args: [ "app", "deploy", "--image-url=${_IMAGE_NAME}" ]
+    args: [
+      "build",
+      "--build-arg JWT_SECRET=$$JWT_SECRET",
+      "--build-arg JWT_EXPIRES=$$JWT_EXPIRES",
+      "--build-arg SALT_ROUNDS=$$SALT_ROUNDS",
+      "--build-arg API_PORT=$$API_PORT",
+      "--build-arg DB_HOST=$$DB_HOST",
+      "--build-arg DB_USERNAME=$$DB_USERNAME",
+      "--build-arg DB_PASSWORD=$$DB_PASSWORD",
+      "--build-arg DB_NAME=$$DB_NAME",
+      "--build-arg CORS_ORIGINS=$$CORS_ORIGINS",
+      "--build-arg BASE_PATH=$$BASE_PATH",
+      "--build-arg BUCKET_NAME=$$BUCKET_NAME"
+      "-t", "${_IMAGE_NAME}", "."
+    ]
     secretEnv: [
-      'JWT_SECRET',
-      'JWT_EXPIRES',
-      'SALT_ROUNDS',
+      "JWT_SECRET",
+      "JWT_EXPIRES",
+      "SALT_ROUNDS",
       "API_PORT",
       "DB_HOST",
       "DB_USERNAME",
@@ -20,6 +28,12 @@ steps:
       "BASE_PATH",
       "BUCKET_NAME"
     ]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: [ "push",  "${_IMAGE_NAME}" ]
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: [ "app", "deploy", "--image-url=${_IMAGE_NAME}" ]
 
 timeout: "2400s"
 
