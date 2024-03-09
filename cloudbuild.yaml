@@ -2,17 +2,17 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     args: [
       "build",
-      "--build-arg JWT_SECRET=$$JWT_SECRET",
-      "--build-arg JWT_EXPIRES=$$JWT_EXPIRES",
-      "--build-arg SALT_ROUNDS=$$SALT_ROUNDS",
-      "--build-arg API_PORT=$$API_PORT",
-      "--build-arg DB_HOST=$$DB_HOST",
-      "--build-arg DB_USERNAME=$$DB_USERNAME",
-      "--build-arg DB_PASSWORD=$$DB_PASSWORD",
-      "--build-arg DB_NAME=$$DB_NAME",
-      "--build-arg CORS_ORIGINS=$$CORS_ORIGINS",
-      "--build-arg BASE_PATH=$$BASE_PATH",
-      "--build-arg BUCKET_NAME=$$BUCKET_NAME",
+      "--build-arg", "JWT_SECRET=$$JWT_SECRET",
+      "--build-arg", "JWT_EXPIRES=$$JWT_EXPIRES",
+      "--build-arg", "SALT_ROUNDS=$$SALT_ROUNDS",
+      "--build-arg", "API_PORT=$$API_PORT",
+      "--build-arg", "DB_HOST=$$DB_HOST",
+      "--build-arg", "DB_USERNAME=$$DB_USERNAME",
+      "--build-arg", "DB_PASSWORD=$$DB_PASSWORD",
+      "--build-arg", "DB_NAME=$$DB_NAME",
+      "--build-arg", "CORS_ORIGINS=$$CORS_ORIGINS",
+      "--build-arg", "BASE_PATH=$$BASE_PATH",
+      "--build-arg", "BUCKET_NAME=$$BUCKET_NAME",
       "-t", "${_IMAGE_NAME}", "."
     ]
     secretEnv: [

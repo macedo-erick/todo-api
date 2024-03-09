@@ -16,7 +16,7 @@ services:
     networks:
       - todo-network
     env_file:
-      - ../.env
+      - ../.env.development
 
   todo-api:
     depends_on:
@@ -36,7 +36,7 @@ services:
     networks:
       - todo-network
     env_file:
-      - ../.env
+      - ../.env.development
     command: yarn run start:debug
 
 volumes:
