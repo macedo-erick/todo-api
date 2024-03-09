@@ -3,12 +3,11 @@ FROM node:18-alpine As development
 WORKDIR /todo-api
 
 COPY --chown=node:node package*.json ./
-COPY --chown=node:node yarn.lock ./
+COPY --chown=node:node yarn.lock .env ./
 
 RUN yarn install --frozen-lockfile
 
 COPY --chown=node:node . .
-COPY --chown=node:node .env.development ./.env 2>>/dev/null
 
 USER node
 
