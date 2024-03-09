@@ -1,5 +1,5 @@
 steps:
-  - name: "cr.io/cloud-builders/docker"
+  - name: "gcr.io/cloud-builders/docker"
     args: [ "build", "-t", "${_IMAGE_NAME}", "." ]
 
   - name: "gcr.io/cloud-builders/gcloud"
