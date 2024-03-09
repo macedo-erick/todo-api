@@ -3,7 +3,7 @@ steps:
     args: [ "build", "-t", "${_IMAGE_NAME}", "." ]
 
   - name: "gcr.io/cloud-builders/gcloud"
-    args: [ "app", "deploy", "--image=${_IMAGE_NAME}" ]
+    args: [ "app", "deploy", "--image-url=${_IMAGE_NAME}" ]
     secretEnv: [
       'JWT_SECRET',
       'JWT_EXPIRES',
