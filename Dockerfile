@@ -2,8 +2,7 @@ FROM node:18-alpine As development
 
 WORKDIR /todo-api
 
-COPY --chown=node:node package*.json ./
-COPY --chown=node:node yarn.lock .env ./
+COPY --chown=node:node yarn.lock package*.json .env ./
 
 RUN yarn install --frozen-lockfile
 
