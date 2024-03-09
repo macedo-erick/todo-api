@@ -35,6 +35,5 @@ FROM node:18-alpine As production
 
 COPY --chown=node:node --from=build /todo-api/node_modules ./node_modules
 COPY --chown=node:node --from=build /todo-api/dist ./dist
-COPY --chown=node:node .env.production ./.env
 
 CMD [ "node", "dist/main" ]
