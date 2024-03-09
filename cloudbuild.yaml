@@ -12,7 +12,7 @@ steps:
       "--build-arg DB_NAME=$$DB_NAME",
       "--build-arg CORS_ORIGINS=$$CORS_ORIGINS",
       "--build-arg BASE_PATH=$$BASE_PATH",
-      "--build-arg BUCKET_NAME=$$BUCKET_NAME"
+      "--build-arg BUCKET_NAME=$$BUCKET_NAME",
       "-t", "${_IMAGE_NAME}", "."
     ]
     secretEnv: [
