@@ -1,0 +1,53 @@
+steps:
+  - name: "cr.io/cloud-builders/docker"
+    args: [ "build", "-t", "${_IMAGE_NAME}", "." ]
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: [ "app", "deploy", "--image=${_IMAGE_NAME}" ]
+    secretEnv: [
+      'JWT_SECRET',
+      'JWT_EXPIRES',
+      'SALT_ROUNDS',
+      "API_PORT",
+      "DB_HOST",
+      "DB_USERNAME",
+      "DB_PASSWORD",
+      "DB_NAME",
+      "CORS_ORIGINS",
+      "BASE_PATH",
+      "BUCKET_NAME"
+    ]
+
+timeout: "2400s"
+
+options:
+  automapSubstitutions: true
+  dynamicSubstitutions: true
+
+images:
+  - "${_IMAGE_NAME}"
+
+availableSecrets:
+  secretManager:
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/JWT_SECRET/versions/1"
+      env: "JWT_SECRET"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/JWT_EXPIRES/versions/1"
+      env: "JWT_EXPIRES"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/SALT_ROUNDS/versions/1"
+      env: "SALT_ROUNDS"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/API_PORT/versions/1"
+      env: "API_PORT"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/DB_HOST/versions/1"
+      env: "DB_HOST"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/DB_NAME/versions/1"
+      env: "DB_USERNAME"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/DB_PASSWORD/versions/1"
+      env: "DB_PASSWORD"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/DB_NAME/versions/1"
+      env: "DB_NAME"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/CORS_ORIGINS/versions/1"
+      env: "CORS_ORIGINS"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/BASE_PATH"
+      env: "BASE_PATH"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/BUCKET_NAME/versions/1"
+      env: "BUCKET_NAME"
