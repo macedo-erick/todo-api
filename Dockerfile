@@ -8,7 +8,7 @@ COPY --chown=node:node yarn.lock ./
 RUN yarn install --frozen-lockfile
 
 COPY --chown=node:node . .
-COPY --chown=node:node .env.development ./.env
+COPY --chown=node:node .env.development ./.env 2>>/dev/null
 
 USER node
 
