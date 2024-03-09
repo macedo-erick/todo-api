@@ -16,11 +16,10 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 const configService = new ConfigService();
 
 const basePath = configService.get('WS_BASE_PATH');
-const socketPath = `/${basePath}`;
 const corsOrigin = configService.get('CORS_ORIGINS');
 
 @WebSocketGateway({
-  path: socketPath,
+  path: basePath,
   nameSpace: 'boards',
   cors: { origin: corsOrigin },
 })
