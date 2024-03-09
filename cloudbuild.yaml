@@ -29,7 +29,7 @@ images:
 
 availableSecrets:
   secretManager:
-    - versionName: "projects/${PROJECT_NUMBER}/secrets/JWT_SECRET/versions/1"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/JWT_SECRET/versions/2"
       env: "JWT_SECRET"
     - versionName: "projects/${PROJECT_NUMBER}/secrets/JWT_EXPIRES/versions/1"
       env: "JWT_EXPIRES"
