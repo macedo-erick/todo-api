@@ -21,7 +21,7 @@ const corsOrigin = configService.get('CORS_ORIGINS');
 @WebSocketGateway({
   path: basePath,
   nameSpace: 'boards',
-  cors: { origin: corsOrigin },
+  cors: { origin: corsOrigin.split(',') },
 })
 export class BoardGateway {
   @WebSocketServer()
