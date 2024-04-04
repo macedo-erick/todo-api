@@ -1,6 +1,6 @@
-import { List } from '../models/list.model';
+import { Sprint } from '../models/sprint.model';
 
 export class CreateBoardDto {
   name: string;
-  list: List[];
+  sprints: Sprint[];
 }

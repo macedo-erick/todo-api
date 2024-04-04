@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { List } from '../models/list.model';
 import { HydratedDocument } from 'mongoose';
+import { Sprint } from '../models/sprint.model';
+import { List } from '../models/list.model';
 
 export type BoardDocument = HydratedDocument<Board>;
 
@@ -10,10 +11,10 @@ export class Board {
   name: string;
 
   @Prop()
-  lists: List[];
+  sprints: Sprint[];
 
   @Prop()
-  userId: string;
+  lists: List[];
 }
 
 export const BoardSchema = SchemaFactory.createForClass(Board);

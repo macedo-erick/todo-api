@@ -4,7 +4,7 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Board, BoardDocument } from './entities/board.entity';
 import { Model } from 'mongoose';
-import { UsersBoards, UserBoardDocument } from './entities/users-boards.entity';
+import { UserBoardDocument, UsersBoards } from './entities/users-boards.entity';
 
 @Injectable()
 export class BoardService {

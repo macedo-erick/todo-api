@@ -1,8 +1,8 @@
 import { Checklist } from './checklist.model';
-import { Priority } from './priority.model';
 import { Comment } from './comment.model';
 import { Activity } from './activity.model';
 import { Attachment } from './attachment.model';
+import { Priority } from '../enums/priority.enum';
 
 export class Card {
   name: string;
