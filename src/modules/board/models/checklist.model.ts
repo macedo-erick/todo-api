@@ -1,6 +1,6 @@
 import { Task } from './task.model';
 
-export interface Checklist {
+export class Checklist {
   name: string;
   tasks: Task[];
 }

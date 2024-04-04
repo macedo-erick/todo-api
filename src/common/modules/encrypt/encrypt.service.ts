@@ -6,14 +6,14 @@ import { ConfigService } from '@nestjs/config';
 export class EncryptService {
   constructor(private configService: ConfigService) {}
 
-  encrypt(str: string) {
+  encrypt(str: string): string {
     return bcrypt.hashSync(
       str,
       parseInt(this.configService.get('SALT_ROUNDS')),
     );
   }
 
-  compare(str: string, hash: string) {
+  compare(str: string, hash: string): string {
     return bcrypt.hashSync(str, hash);
   }
 }

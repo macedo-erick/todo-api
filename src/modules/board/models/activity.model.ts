@@ -1,4 +1,4 @@
-export interface Activity {
+export class Activity {
   author: string;
   description: string;
   createdDate: Date;

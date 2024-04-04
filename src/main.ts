@@ -20,6 +20,17 @@ async function bootstrap() {
     .setVersion('0.0.1-SNAPSHOT')
     .setLicense('GNU', 'https://choosealicense.com/licenses/lgpl-3.0/')
     .setContact('Erick Macedo', null, 'macedo.eriick@gmail.com')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        in: 'header',
+      },
+      'APIKey',
+    )
+    .addSecurityRequirements('APIKey')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
