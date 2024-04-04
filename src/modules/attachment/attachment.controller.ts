@@ -65,8 +65,8 @@ export class AttachmentController {
   @Get('/:key')
   async downloadFile(
     @Param('key') key: string,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<StreamableFile> {
+    @Res() res: Response,
+  ): Promise<void> {
     const fileContent = await this.attachmentService.downloadFile(key);
 
     res.set({
@@ -74,7 +74,7 @@ export class AttachmentController {
       'Content-Disposition': `attachment; filename="${key}"`,
     });
 
-    return new StreamableFile(fileContent);
+    fileContent.pipe(res);
   }
 
   @Delete('/:key')
