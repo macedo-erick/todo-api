@@ -67,14 +67,16 @@ export class AttachmentController {
     @Param('key') key: string,
     @Res() res: Response,
   ): Promise<void> {
-    const fileContent = await this.attachmentService.downloadFile(key);
+    const file = await this.attachmentService.downloadFile(key);
+    const [metadata] = await file.getMetadata();
 
     res.set({
-      'Content-Type': 'application/octet-stream',
-      'Content-Disposition': `attachment; filename="${key}"`,
+      'Content-Type': metadata.contentType,
+      'Content-Disposition': `inline; filename="${key}"`,
+      'Content-Length': metadata.size,
     });
 
-    fileContent.pipe(res);
+    file.createReadStream().pipe(res);
   }
 
   @Delete('/:key')

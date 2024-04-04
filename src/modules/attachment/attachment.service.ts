@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { dirname, join } from 'path';
-import { Storage } from '@google-cloud/storage';
+import { File, Storage } from '@google-cloud/storage';
 import { Attachment } from '../board/models/attachment.model';
-import { Response } from 'express';
 
 @Injectable()
 export class AttachmentService {
@@ -38,8 +37,8 @@ export class AttachmentService {
     };
   }
 
-  async downloadFile(key: string) {
-    return this.storage.bucket(this.bucketName).file(key).createReadStream();
+  async downloadFile(key: string): Promise<File> {
+    return this.storage.bucket(this.bucketName).file(key);
   }
 
   deleteFile(key: string): Promise<unknown> {
