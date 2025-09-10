@@ -65,7 +65,7 @@ availableSecrets:
       env: "DB_NAME"
     - versionName: "projects/${PROJECT_NUMBER}/secrets/CORS_ORIGINS/versions/3"
       env: "CORS_ORIGINS"
-    - versionName: "projects/${PROJECT_NUMBER}/secrets/HTTP_BASE_PATH/versions/1"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/HTTP_BASE_PATH/versions/2"
       env: "HTTP_BASE_PATH"
     - versionName: "projects/${PROJECT_NUMBER}/secrets/WS_BASE_PATH/versions/1"
       env: "WS_BASE_PATH"
