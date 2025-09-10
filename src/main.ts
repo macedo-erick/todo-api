@@ -2,7 +2,7 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { EnvironmentsEnum } from './common/enums/Environments.enum';
+import { EnvironmentsEnum } from './common/enums/environments.enum';
 import * as cookieParser from 'cookie-parser';
 import { AuthGuard } from './modules/auth/guards/auth/auth.guard';
 import { JwtService } from '@nestjs/jwt';
