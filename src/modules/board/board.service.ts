@@ -4,7 +4,8 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Board, BoardDocument } from './entities/board.entity';
 import { Model } from 'mongoose';
-import { UsersBoards, UserBoardDocument } from './entities/users-boards.entity';
+import { UserBoardDocument, UsersBoards } from './entities/users-boards.entity';
+import { SprintStatus } from './enums/sprint-status';
 
 @Injectable()
 export class BoardService {
@@ -36,8 +37,20 @@ export class BoardService {
     return boards.map(({ name, _id: boardId }) => ({ name, boardId }));
   }
 
-  findOne(id: string) {
-    return this.boardModel.findById(id).exec();
+  async findOne(id: string) {
+    const boardDocument = await this.boardModel.findById(id).exec();
+    const { sprints, lists, ...board } = boardDocument.toObject();
+
+    const activeSprintId = sprints.find(
+      (sprint) => sprint.status === SprintStatus.ACTIVE,
+    ).id;
+
+    const filteredList = lists.map(({ cards, ...list }) => ({
+      ...list,
+      cards: cards.filter((card) => card.sprintId == activeSprintId),
+    }));
+
+    return { ...board, lists: filteredList, sprints };
   }
 
   findByName(userId: string, name: string) {

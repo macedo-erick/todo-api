@@ -13,7 +13,7 @@ export class EncryptService {
     );
   }
 
-  compare(str: string, hash: string): string {
-    return bcrypt.hashSync(str, hash);
+  compare(str: string, hash: string): boolean {
+    return bcrypt.compareSync(str, hash);
   }
 }
