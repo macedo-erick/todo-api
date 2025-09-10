@@ -37,8 +37,8 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     args: [ "push", "${_IMAGE_NAME}" ]
 
-  - name: "gcr.io/cloud-builders/gcloud"
-    args: [ "app", "deploy", "--image-url=${_IMAGE_NAME}" ]
+#  - name: "gcr.io/cloud-builders/gcloud"
+#    args: [ "app", "deploy", "--image-url=${_IMAGE_NAME}" ]
 
 timeout: "2400s"
 
@@ -63,9 +63,9 @@ availableSecrets:
       env: "DB_PASSWORD"
     - versionName: "projects/${PROJECT_NUMBER}/secrets/DB_NAME/versions/1"
       env: "DB_NAME"
-    - versionName: "projects/${PROJECT_NUMBER}/secrets/CORS_ORIGINS/versions/2"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/CORS_ORIGINS/versions/3"
       env: "CORS_ORIGINS"
-    - versionName: "projects/${PROJECT_NUMBER}/secrets/HTTP_BASE_PATH/versions/1"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/HTTP_BASE_PATH/versions/2"
       env: "HTTP_BASE_PATH"
     - versionName: "projects/${PROJECT_NUMBER}/secrets/WS_BASE_PATH/versions/1"
       env: "WS_BASE_PATH"
