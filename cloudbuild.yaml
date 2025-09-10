@@ -37,8 +37,8 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     args: [ "push", "${_IMAGE_NAME}" ]
 
-  - name: "gcr.io/cloud-builders/gcloud"
-    args: [ "app", "deploy", "--image-url=${_IMAGE_NAME}" ]
+#  - name: "gcr.io/cloud-builders/gcloud"
+#    args: [ "app", "deploy", "--image-url=${_IMAGE_NAME}" ]
 
 timeout: "2400s"
 
