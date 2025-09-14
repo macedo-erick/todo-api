@@ -11,6 +11,9 @@ export class Board {
   name: string;
 
   @Prop()
+  prefix: string;
+
+  @Prop()
   sprints: Sprint[];
 
   @Prop()
