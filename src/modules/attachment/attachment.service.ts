@@ -10,16 +10,16 @@ export class AttachmentService {
   private readonly rootPath = dirname(require.main.filename);
   private readonly bucketName = this.configService.get('BUCKET_NAME');
 
-  decoded = Buffer.from(
-    this.configService.get<string>('GOOGLE_CREDENTIALS'),
+  storageCredentials = Buffer.from(
+    this.configService.get<string>('STORAGE_CREDENTIALS'),
     'base64',
   ).toString('utf8');
 
-  credentials: any = JSON.parse(this.decoded);
+  credentials: any = JSON.parse(this.storageCredentials);
 
   storage = new Storage({
     projectId: this.credentials.projetct_id,
-    credentials: JSON.parse(this.decoded),
+    credentials: JSON.parse(this.storageCredentials),
   });
 
   constructor(private configService: ConfigService) {}
