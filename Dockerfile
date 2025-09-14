@@ -31,7 +31,6 @@ FROM node:18-alpine As production
 
 COPY --chown=node:node --from=build /todo-api/node_modules ./node_modules
 COPY --chown=node:node --from=build /todo-api/dist ./dist
-COPY --chown=node:node --from=build /todo-api/assets ./dist/assets
 
 ARG JWT_SECRET
 ARG JWT_EXPIRES
@@ -45,6 +44,7 @@ ARG CORS_ORIGINS
 ARG HTTP_BASE_PATH
 ARG WS_BASE_PATH
 ARG BUCKET_NAME
+ARG STORAGE_CREDENTIALS
 
 ENV JWT_SECRET=${JWT_SECRET}
 ENV JWT_EXPIRES=${JWT_EXPIRES}
@@ -58,6 +58,7 @@ ENV CORS_ORIGINS=${CORS_ORIGINS}
 ENV HTTP_BASE_PATH=${HTTP_BASE_PATH}
 ENV WS_BASE_PATH=${WS_BASE_PATH}
 ENV BUCKET_NAME=${BUCKET_NAME}
+ENV STORAGE_CREDENTIALS=${STORAGE_CREDENTIALS}
 ENV NODE_ENV=production
 
 CMD [ "node", "dist/main" ]

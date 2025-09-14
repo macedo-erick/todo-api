@@ -16,6 +16,7 @@ steps:
           --build-arg HTTP_BASE_PATH=$$HTTP_BASE_PATH
           --build-arg WS_BASE_PATH=$$WS_BASE_PATH
           --build-arg BUCKET_NAME=$$BUCKET_NAME
+          --build-arg STORAGE_CREDENTIALS=$$STORAGE_CREDENTIALS
           -t ${_IMAGE_NAME}
           ."
       ]
@@ -31,7 +32,8 @@ steps:
       "CORS_ORIGINS",
       "HTTP_BASE_PATH",
       "WS_BASE_PATH",
-      "BUCKET_NAME"
+      "BUCKET_NAME",
+      "STORAGE_CREDENTIALS"
     ]
 
   - name: "gcr.io/cloud-builders/docker"
@@ -71,3 +73,5 @@ availableSecrets:
       env: "WS_BASE_PATH"
     - versionName: "projects/${PROJECT_NUMBER}/secrets/BUCKET_NAME/versions/1"
       env: "BUCKET_NAME"
+    - versionName: "projects/${PROJECT_NUMBER}/secrets/STORAGE_CREDENTIALS/versions/1"
+      env: "STORAGE_CREDENTIALS"

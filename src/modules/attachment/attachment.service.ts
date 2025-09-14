@@ -9,15 +9,17 @@ import { Attachment } from '../board/models/attachment.model';
 export class AttachmentService {
   private readonly rootPath = dirname(require.main.filename);
   private readonly bucketName = this.configService.get('BUCKET_NAME');
-  private readonly serviceKey = join(
-    this.rootPath,
-    'assets',
-    'account-key.json',
-  );
+
+  decoded = Buffer.from(
+    this.configService.get<string>('GOOGLE_CREDENTIALS'),
+    'base64',
+  ).toString('utf8');
+
+  credentials: any = JSON.parse(this.decoded);
 
   storage = new Storage({
-    keyFilename: this.serviceKey,
-    projectId: this.configService.get('GCP_PROJECT_ID'),
+    projectId: this.credentials.projetct_id,
+    credentials: JSON.parse(this.decoded),
   });
 
   constructor(private configService: ConfigService) {}
